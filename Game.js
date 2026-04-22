@@ -1,4 +1,6 @@
-import Render from "./Render.js"
+import Render from "./Render.js";
+import Inputs from "./Inputs.js";
+import Camera from "./Camera.js";
 
 export default class Game
 {
@@ -7,24 +9,28 @@ export default class Game
         console.log("Started");
 
         this.rend = new Render();
+        this.inputs = new Inputs();
+        this.camera = new Camera();
+
         this.accumulator = 0;
         this.lastTime = performance.now();
-        this.GameLoop();
         this.deltaTime = 0;
+        this.GameLoop();
     }
 
     GameLoop()
     {
-        const cappedFrames = 2;
+        const cappedFrames = 100;
         const targetDelta = 1 / cappedFrames
         const targetFixedFrames = 20;
         const fixedDeltaTime = 1 / targetFixedFrames;
 
         const now = performance.now();
-        this.deltaTime += (now - this.lastTime) / 1000;
+        const time = (now - this.lastTime) / 1000;
+        this.deltaTime += time;
         this.lastTime = now;
 
-        this.accumulator += this.deltaTime;
+        this.accumulator += time;
 
         while (this.accumulator >= fixedDeltaTime)
         {
@@ -43,11 +49,15 @@ export default class Game
     Update(deltaTime)
     {
         //console.log(deltaTime);
-        this.rend.Render();
+        this.inputs.FixedUpdate();
+        // temp ska nog flyttas till fixedupdate
+        let view = this.camera.Update(deltaTime, this.inputs);
+        this.rend.Render(view);
+        
     }
 
-    FixedUpdate(fixedDeltaTime)
+    FixedUpdate(fixedDeltaTime) 
     {
-        //console.log(fixedDeltaTime);
+        
     }
 }

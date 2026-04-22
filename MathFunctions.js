@@ -5,22 +5,22 @@ export default class MathFunctions // matematiska funktioner inte inbyggda i jav
         return {x, y};
     }
 
-    Add(a, b)
+    Vec2Add(a, b)
     {
         return this.Vec2(a.x + b.x, a.y + b.y);
     }
 
-    Subtract(a, b)
+    Vec2Subtract(a, b)
     {
         return this.Vec2(a.x - b.x, a.y - b.y);
     }
 
-    Multiply()
+    Vec2Multiply()
     {
         return this.Vec2(a.x * b.x, a.y * b.y);
     }
 
-    Divide()
+    Vec2Divide()
     {
         return this.Vec2(a.x / b.x, a.y / b.y);
     }
