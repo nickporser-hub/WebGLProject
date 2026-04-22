@@ -1,4 +1,6 @@
 import MathFunctions from "./MathFunctions.js"
+import Shader from "./Shader.js"
+import ShaderSources from "./ShaderSources.js"
 
 export default class Renderer
 {
@@ -9,6 +11,8 @@ export default class Renderer
         this.gl = canvas.getContext("webgl2");
         
         this.mathFs = new MathFunctions();
+        this.shaderSources = new ShaderSources();
+
         this.spriteSheet = this.mathFs.Vec2(240, 240);
         this.shipSize = this.mathFs.Vec2(48, 48);  
         this.uvIndex = 
@@ -36,51 +40,16 @@ export default class Renderer
 
         window.addEventListener("resize", this.OnResize.bind(this));
 
+        this.objectShaderProgram = new Shader(this.gl, this.shaderSources.objectVertexShaderSource, this.shaderSources.fragmentShaderSource); // objectshaderProgram
+
         this.CreatePlayerRender();
         
-        const objectVertexShaderSource = `#version 300 es
-
-            layout(location = 0) in vec2 aPosition;
-            layout(location = 1) in vec2 aUV;
-
-            out vec2 vUV; 
-
-            uniform mat4 uProjection;
-            uniform mat4 uView;
-
-            void main()
-            {
-                gl_Position = uProjection * vec4(aPosition, 0.0, 1.0);
-                vUV = aUV;
-            }
-        `;
-        const fragmentShaderSource = `#version 300 es
-            
-            precision mediump float;
-
-            in vec2 vUV; 
-            out vec4 FragColor;
-
-            uniform sampler2D uTexture;
-
-            void main()
-            {
-                FragColor = texture(uTexture, vUV);
-            }
-        `;
-
-        const objectVertexShader = this.CreateShader(this.gl.VERTEX_SHADER, objectVertexShaderSource);
-        const fragmentShader = this.CreateShader(this.gl.FRAGMENT_SHADER, fragmentShaderSource);
-
-        this.objectShaderProgram = this.CreateObjectShader(objectVertexShader, fragmentShader);
-
-        this.gl.deleteShader(objectVertexShader);
-        this.gl.deleteShader(fragmentShader); // delete shaders de sparas i shaderPrograms
-
         const shipsTexture = this.LoadTexture("Assets/Textures/SpaceGameSpriteSheet.png");
 
         this.objectShaderProgram.Use();
-        this.gl.uniform1i(this.objectShaderProgram.UniformLoc.uTextureLoc, shipsTexture);
+        this.gl.activeTexture(this.gl.TEXTURE0);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, shipsTexture);
+        this.gl.uniform1i(this.objectShaderProgram.uTexture, 0);// binda texture till shader programmet
 
         this.OnResize();
     }
@@ -111,50 +80,6 @@ export default class Renderer
         return texture;
     }
 
-    CreateObjectShader(vertexShader, fragmentShader)
-    {
-        const program = this.gl.createProgram();
-        this.gl.attachShader(program, vertexShader);
-        this.gl.attachShader(program, fragmentShader);
-        this.gl.linkProgram(program);
-        
-        const ObjectShaderProgram =
-        {
-            Program: program,
-            UniformLoc:
-            {
-                uProjectionLoc: this.gl.getUniformLocation(program, "uProjection"),
-                uTextureLoc: this.gl.getUniformLocation(program, "uTexture"),
-                uViewLoc: this.gl.getUniformLocation(program, "uView"),
-            },
-            Use: () =>
-            {
-                this.gl.useProgram(program);
-            }
-        };
-
-        return ObjectShaderProgram;
-    }
-
-    CreateShader(type, source)
-    {
-        const shader = this.gl.createShader(type);
-        this.gl.shaderSource(shader, source);
-        this.gl.compileShader(shader);
-        this.CheckShaderCompile(shader);
-        return shader;
-    }
-
-    CheckShaderCompile(shader)
-    {
-        const success = this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS);
-        if (!success)
-        {
-            const info = this.gl.getShaderInfoLog(shader);
-            console.error("shader error", info);
-            this.gl.deleteShader(shader);
-        }
-    }
 
     OnResize() // fixa onresize//
     {
@@ -184,13 +109,13 @@ export default class Renderer
         ]);
 
         this.objectShaderProgram.Use();  
-        this.gl.uniformMatrix4fv(this.objectShaderProgram.UniformLoc.uProjectionLoc, false, projection);
+        this.gl.uniformMatrix4fv(this.objectShaderProgram.uProjection, false, projection);
     }
 
     Render(view)
     {
-        //this.objectShaderProgram.Use();
-        //this.gl.uniformMatrix4fv(this.objectShaderProgram.UniformLoc.uProjectionLoc, false, view);
+        this.objectShaderProgram.Use();
+        this.gl.uniformMatrix4fv(this.objectShaderProgram.uView, false, view);
 
         this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 

@@ -5,12 +5,13 @@ export default class Camera
     constructor()
     {
         this.mathFs = new MathFunctions();
+        this.playerPos = this.mathFs.Vec2(0, 0);
     }
 
     Update(deltaTime, input)
     {
+        const screenAspect = window.innerHeight / window.innerWidth;
         let direction = this.mathFs.Vec2(0, 0);
-        let playerPos = this.mathFs.Vec2(0, 0);
         let velocity;
         
         if (input.IsKeyDown("w")) direction.y += 1;
@@ -18,19 +19,19 @@ export default class Camera
         if (input.IsKeyDown("d")) direction.x += 1;
         if (input.IsKeyDown("a")) direction.x -= 1;
 
-        if (direction.x + direction.y != 1)
-            velocity = 10 / 1.414;
+        if (direction.x * direction.y != 0)
+            velocity = 2 / 1.414;
         else 
-            velocity = 10;
-        playerPos.x = velocity * deltaTime * direction.x;
-        playerPos.y = velocity * deltaTime * direction.y;
+            velocity = 2;
+        this.playerPos.x += velocity * deltaTime * direction.x * screenAspect;
+        this.playerPos.y += velocity * deltaTime * direction.y;
 
         let View = new Float32Array // fel view måste fixa nästa gång
         ([
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            playerPos.x, playerPos.y, 0, 1
+            this.playerPos.x, this.playerPos.y, 0, 1
         ]);  
         
         return View;
