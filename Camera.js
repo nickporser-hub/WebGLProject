@@ -26,7 +26,7 @@ export default class Camera
         this.playerPos.x += velocity * deltaTime * direction.x * screenAspect;
         this.playerPos.y += velocity * deltaTime * direction.y;
 
-        let View = new Float32Array // fel view måste fixa nästa gång
+        let View = new Float32Array
         ([
             1, 0, 0, 0,
             0, 1, 0, 0,

@@ -15,12 +15,12 @@ export default class MathFunctions // matematiska funktioner inte inbyggda i jav
         return this.Vec2(a.x - b.x, a.y - b.y);
     }
 
-    Vec2Multiply()
+    Vec2Multiply(a, b)
     {
         return this.Vec2(a.x * b.x, a.y * b.y);
     }
 
-    Vec2Divide()
+    Vec2Divide(a, b)
     {
         return this.Vec2(a.x / b.x, a.y / b.y);
     }
