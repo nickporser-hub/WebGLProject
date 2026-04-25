@@ -1,4 +1,4 @@
-import MathFunctions from "./MathFunctions.js"
+import MathFunctions from "../Core/MathFunctions.js"
 
 export default class EnemySpawns
 {

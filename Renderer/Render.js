@@ -1,7 +1,8 @@
-import MathFunctions from "./MathFunctions.js"
-import Shader from "./Shader.js"
-import ShaderSources from "./ShaderSources.js"
-import EnemySpawns from "./EnemySpawns.js"
+import MathFunctions from "../Core/MathFunctions.js";
+import Shader from "./Shader.js";
+import ShaderSources from "../Resources/ShaderSources.js";
+import EnemySpawns from "../Game/EnemySpawns.js";
+import TextureLoader from "./TextureLoader.js";
 
 export default class Renderer
 {
@@ -14,6 +15,7 @@ export default class Renderer
         this.mathFs = new MathFunctions();
         this.shaderSources = new ShaderSources();
         this.enemySpawns = new EnemySpawns();
+        this.textureLoader = new TextureLoader(this.gl);
 
         this.spriteSheet = this.mathFs.Vec2(240, 240);
         this.shipSize = this.mathFs.Vec2(48, 48);  
@@ -59,7 +61,7 @@ export default class Renderer
         this.PlayerRender = this.CreatePlayerRender();
         this.EnemyRender = this.CreateEnemyRender();
         
-        const shipsTexture = this.LoadTexture("Assets/Textures/SpaceGameSpriteSheet.png"); // load the texture
+        const shipsTexture = this.textureLoader.LoadTexture("Assets/Textures/SpaceGameSpriteSheet.png"); // load the texture
 
         this.objectShaderProgram.Use();
         this.gl.activeTexture(this.gl.TEXTURE0);
@@ -68,7 +70,7 @@ export default class Renderer
 
         this.OnResize();
     }
-
+    /*
     LoadTexture(url)
     {
         const texture = this.gl.createTexture();
@@ -93,7 +95,7 @@ export default class Renderer
         };
 
         return texture;
-    }
+    }*/
 
     OnResize() // fixa onresize//
     {

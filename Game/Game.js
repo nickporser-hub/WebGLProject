@@ -1,4 +1,4 @@
-import Render from "./Render.js";
+import Render from "../Renderer/Render.js";
 import Inputs from "./Inputs.js";
 import Camera from "./Camera.js";
 
