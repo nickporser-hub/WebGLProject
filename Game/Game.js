@@ -1,6 +1,7 @@
 import Render from "../Renderer/Render.js";
 import Inputs from "./Inputs.js";
 import Camera from "./Camera.js";
+import EnemySystem from "./EnemySystem.js";
 
 export default class Game
 {
@@ -8,6 +9,7 @@ export default class Game
     {
         console.log("Started");
 
+        this.enemySystem = new EnemySystem();
         this.rend = new Render();
         this.inputs = new Inputs();
         this.camera = new Camera();
@@ -52,7 +54,7 @@ export default class Game
         this.inputs.FixedUpdate();
         // temp ska nog flyttas till fixedupdate
         let view = this.camera.Update(deltaTime, this.inputs);
-        this.rend.Render(view);
+        this.rend.Render(view, this.enemySystem.enemyQuadBatch);
         
     }
 

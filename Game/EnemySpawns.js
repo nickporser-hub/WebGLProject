@@ -2,13 +2,20 @@ import MathFunctions from "../Core/MathFunctions.js"
 
 export default class EnemySpawns
 {
-    constructor(enemySize)
+    constructor()
     {
         this.mathFs = new MathFunctions();
+        this.uvIndex = 
+        {
+            swedenShip: 0,
+            finlandShip: 1
+        }; 
     }
 
-    Round1(scale, enemySize)
+    Round1(enemySize)
     {
+        let uvIndex = [];
+        let scale = 2;
         let positions = [];
         let amount = 7;
         const quadSize = this.mathFs.Vec2(enemySize.x * scale, enemySize.y * scale);
@@ -25,8 +32,10 @@ export default class EnemySpawns
 
             positions.push(pos1);
             positions.push(pos2);
+
+            uvIndex.push(this.uvIndex.finlandShip);
         }
 
-        return {Positions: positions, QuadSize: quadSize, Amount: amount};
+        return {Positions: positions, QuadSize: quadSize, Amount: amount, UVIndex: uvIndex};
     }
 }
