@@ -31,6 +31,6 @@ export default class TextureCoords
             //
         }
 
-        return{U0: u0, V0: v0, U1: u1, V1: v1};
+        return {U0: u0, V0: v0, U1: u1, V1: v1};
     }
 }

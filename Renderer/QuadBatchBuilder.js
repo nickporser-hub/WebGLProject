@@ -5,15 +5,15 @@ export default class QuadBatchBuilder
 
     }
 
-    CreateEnemyRender(enemies, UVs)
+    CreateQuadBatch(objekt, UVs)
     {
         let vertices = []; // vertices för quadsen
         let indices = []; // ordern för vertices
 
         const scale = 2; // skala för quaden
-        const positions = enemies.Positions;
-        const amount = enemies.Amount;
-        const quadSize = enemies.QuadSize;
+        const positions = objekt.Positions;
+        const amount = objekt.Amount;
+        const quadSize = objekt.QuadSize;
 
         for (let i = 0; i < amount; i++)
         {
@@ -22,12 +22,12 @@ export default class QuadBatchBuilder
             let u1 = UVs.U1[i];
             let v1 = UVs.V1[i];
 
-            let enemyPos = positions[i]; // enemypositions
+            let quadPos = positions[i]; // positions
             
-            vertices.push(enemyPos.x, enemyPos.y, u0, v0);                          // bottomLeft 
-            vertices.push(enemyPos.x, enemyPos.y + quadSize.y, u1, v0);             // topLeft 
-            vertices.push(enemyPos.x + quadSize.x, enemyPos.y + quadSize.y, u1, v1);// topRight 
-            vertices.push(enemyPos.x + quadSize.x, enemyPos.y, u0, v1);             // bottomRight 
+            vertices.push(quadPos.x, quadPos.y, u0, v0);                          // bottomLeft 
+            vertices.push(quadPos.x, quadPos.y + quadSize.y, u1, v0);             // topLeft 
+            vertices.push(quadPos.x + quadSize.x, quadPos.y + quadSize.y, u1, v1);// topRight 
+            vertices.push(quadPos.x + quadSize.x, quadPos.y, u0, v1);             // bottomRight 
 
             let vertexIndex = i * 4; 
 
@@ -40,4 +40,5 @@ export default class QuadBatchBuilder
         }
         return {Vertices: vertices, Indices: indices};
     }
+    
 }

@@ -9,17 +9,12 @@ export default class Shader
 
         this.program = this.CreateObjectShader(vertexShader, fragmentShader);
 
-        this.uTexture = this.shaderUniformLoc("uTexture");
-        this.uView = this.shaderUniformLoc("uView");
-        this.uProjection = this.shaderUniformLoc("uProjection");
+        this.uTexture = this.ShaderUniformLoc("uTexture");
+        this.uView = this.ShaderUniformLoc("uView");
+        this.uProjection = this.ShaderUniformLoc("uProjection");
 
         this.gl.deleteShader(vertexShader);
         this.gl.deleteShader(fragmentShader); // delete shaders de sparas i shaderPrograms
-    }
-
-    shaderUniformLoc(name)
-    {
-        return this.gl.getUniformLocation(this.program, name);
     }
 
     CreateObjectShader(vertexShader, fragmentShader)
@@ -54,5 +49,29 @@ export default class Shader
     Use()
     {
         this.gl.useProgram(this.program);
+    }
+
+    ShaderUniformLoc(name)
+    {
+        return this.gl.getUniformLocation(this.program, name);
+    }
+
+    UniformMatrix4fv(location, value)
+    {
+        this.Use(); 
+        this.gl.uniformMatrix4fv(location, false, value);
+    }
+
+    Uniform1i(location, value)
+    {
+        this.gl.uniform1i(location, 0);
+    }
+
+    TextureUniform(location, texture, value)// binda texture till shader programmet
+    {
+        this.Use();
+        this.gl.activeTexture(this.gl.TEXTURE0);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+        this.Uniform1i(location, value);
     }
 }

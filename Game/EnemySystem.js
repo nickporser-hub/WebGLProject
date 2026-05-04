@@ -10,7 +10,7 @@ export default class EnemySystem
         this.mathFs = new MathFunctions();
         this.enemySize = this.mathFs.Vec2(48, 48);
 
-        this.shipTextureCoords = new TextureCoords(this.mathFs.Vec2(240, 240), this.mathFs.Vec2(48, 48));
+        this.shipTextureCoords = new TextureCoords(this.mathFs.Vec2(240, 240), this.enemySize);
         this.quadBatchBuilder = new QuadBatchBuilder(); 
 
         this.enemySpawns = new EnemySpawns();
@@ -25,8 +25,8 @@ export default class EnemySystem
         const index = enemies.UVIndex;
         const UVs = this.shipTextureCoords.GetUV(index, amount);
 
-        const batchBuilder = this.quadBatchBuilder.CreateEnemyRender(enemies, UVs);
+        const quadBatch = this.quadBatchBuilder.CreateQuadBatch(enemies, UVs);
 
-        return batchBuilder; 
+        return quadBatch; 
     }
 }

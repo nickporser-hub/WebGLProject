@@ -1,18 +1,26 @@
 import Render from "../Renderer/Render.js";
 import Inputs from "./Inputs.js";
-import Camera from "./Camera.js";
+import Movement from "./Movement.js";
 import EnemySystem from "./EnemySystem.js";
+import PlayerSystem from "./PlayerSystem.js";
+import Camera from "../Renderer/Camera.js";
+import ShaderManager from "../Renderer/ShaderManager.js";
 
 export default class Game
 {
     constructor()
     {
         console.log("Started");
+        const canvas = document.getElementById("glCanvas"); // definera canvas
+        this.gl = canvas.getContext("webgl2"); // definera webgl
 
+        this.shaderManager = new ShaderManager(this.gl);
+        this.camera = new Camera(this.gl, this.shaderManager);
         this.enemySystem = new EnemySystem();
-        this.rend = new Render();
+        this.PlayerSystem = new PlayerSystem();
+        this.rend = new Render(this.gl, this.shaderManager);
         this.inputs = new Inputs();
-        this.camera = new Camera();
+        this.movement = new Movement();
 
         this.accumulator = 0;
         this.lastTime = performance.now();
@@ -53,9 +61,12 @@ export default class Game
         //console.log(deltaTime);
         this.inputs.FixedUpdate();
         // temp ska nog flyttas till fixedupdate
-        let view = this.camera.Update(deltaTime, this.inputs);
-        this.rend.Render(view, this.enemySystem.enemyQuadBatch);
-        
+        let playerPos = this.movement.Update(deltaTime, this.inputs);
+        this.camera.CameraView(playerPos);
+
+        this.rend.ClearScreen();
+        this.rend.Render(this.shaderManager.Get("object"), this.PlayerSystem.playerQuadBatch);
+        this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.enemyQuadBatch);
     }
 
     FixedUpdate(fixedDeltaTime) 

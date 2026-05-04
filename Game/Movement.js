@@ -1,6 +1,6 @@
 import MathFunctions from "../Core/MathFunctions.js";
 
-export default class Camera
+export default class Movement
 {
     constructor()
     {
@@ -26,15 +26,7 @@ export default class Camera
         this.playerPos.x += velocity * deltaTime * direction.x * screenAspect;
         this.playerPos.y += velocity * deltaTime * direction.y;
 
-        let View = new Float32Array
-        ([
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            this.playerPos.x, this.playerPos.y, 0, 1
-        ]);  
-        
-        return View;
+        return this.playerPos;
     }
 
 }
