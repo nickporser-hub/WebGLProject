@@ -1,4 +1,4 @@
-import MathFunctions from "../Core/MathFunctions.js"
+import MathFunctions from "../Core/MathFunctions.js";
 
 export default class EnemySpawns
 {
@@ -24,8 +24,8 @@ export default class EnemySpawns
         positions.push(centerQuad); // mitten enemy
         for (let i = 1; i < amount; i++) // skapa positionerna för enemies i scenen
         {
-            let coord1 = this.mathFs.Vec2((i + 1), (i + 1));
-            let coord2 = this.mathFs.Vec2((i + 1), (-i + 1));
+            let coord1 = this.mathFs.Vec2((i * 1.5 + 1), (i * 1.5 + 1));
+            let coord2 = this.mathFs.Vec2((i * 1.5 + 1), (-i * 1.5 + 1));
 
             let pos1 = this.mathFs.Vec2Multiply(centerQuad, coord1);
             let pos2 = this.mathFs.Vec2Multiply(centerQuad, coord2);

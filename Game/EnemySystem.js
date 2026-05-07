@@ -1,4 +1,5 @@
 import EnemySpawns from "./EnemySpawns.js";
+import EnemyMovement from "./EnemyMovement.js";
 import MathFunctions from "../Core/MathFunctions.js";
 import QuadBatchBuilder from "../Renderer/QuadBatchBuilder.js";
 import TextureCoords from "../Renderer/TextureCoords.js";
@@ -14,13 +15,20 @@ export default class EnemySystem
         this.quadBatchBuilder = new QuadBatchBuilder(); 
 
         this.enemySpawns = new EnemySpawns();
+        this.enemyMovement = new EnemyMovement();
+
+        this.rounds = new Map() //Sparar alla rundor i en map
         
-        let enemies = this.enemySpawns.Round1(this.enemySize);
-        this.enemyQuadBatch = this.CreateEnemyQuadBatch(enemies);
+        this.enemyRound1 = this.enemySpawns.Round1(this.enemySize);
+        //let enemies = this.enemyPos.Round1(this.enemySize);
+        //this.enemyQuadBatch = this.CreateEnemyQuadBatch(enemies);
     }
 
-    CreateEnemyQuadBatch(enemies)
+    CreateEnemyQuadBatch(deltaTime)
     {
+        let enemies = this.enemyRound1;//vilken enemies runda som används //temp
+        enemies.Positions = this.enemyMovement.BasicLeftMovement(enemies.Positions, deltaTime); // vilken movement de har
+
         const amount = enemies.Amount;
         const index = enemies.UVIndex;
         const UVs = this.shipTextureCoords.GetUV(index, amount);
@@ -29,4 +37,15 @@ export default class EnemySystem
 
         return quadBatch; 
     }
+
+    /*
+    RoundSet()
+    {
+
+    }
+
+    RoundGet()
+    {
+
+    }*/
 }

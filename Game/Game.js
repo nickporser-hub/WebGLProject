@@ -58,7 +58,6 @@ export default class Game
 
     Update(deltaTime)
     {
-        //console.log(deltaTime);
         this.inputs.FixedUpdate();
         // temp ska nog flyttas till fixedupdate
         let playerPos = this.movement.Update(deltaTime, this.inputs);
@@ -66,7 +65,7 @@ export default class Game
 
         this.rend.ClearScreen();
         this.rend.Render(this.shaderManager.Get("object"), this.PlayerSystem.playerQuadBatch);
-        this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.enemyQuadBatch);
+        this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.CreateEnemyQuadBatch(deltaTime));
     }
 
     FixedUpdate(fixedDeltaTime) 
