@@ -1,10 +1,11 @@
 import Render from "../Renderer/Render.js";
 import Inputs from "./Inputs.js";
-import Movement from "./Movement.js";
-import EnemySystem from "./EnemySystem.js";
-import PlayerSystem from "./PlayerSystem.js";
+//import Movement from "./Player/Movement.js";
+import EnemySystem from "./Enemies/EnemySystem.js";
+import PlayerSystem from "./Player/PlayerSystem.js";
 import Camera from "../Renderer/Camera.js";
 import ShaderManager from "../Renderer/ShaderManager.js";
+import Collisions from "./Physics/Collisions.js";
 
 export default class Game
 {
@@ -17,14 +18,17 @@ export default class Game
         this.shaderManager = new ShaderManager(this.gl);
         this.camera = new Camera(this.gl, this.shaderManager);
         this.enemySystem = new EnemySystem();
-        this.PlayerSystem = new PlayerSystem();
+        this.playerSystem = new PlayerSystem();
         this.rend = new Render(this.gl, this.shaderManager);
         this.inputs = new Inputs();
-        this.movement = new Movement();
+        //this.movement = new Movement();
+        this.collisions = new Collisions();
 
         this.accumulator = 0;
         this.lastTime = performance.now();
         this.deltaTime = 0;
+
+        this.Start();
         this.GameLoop();
     }
 
@@ -60,16 +64,31 @@ export default class Game
     {
         this.inputs.FixedUpdate();
         // temp ska nog flyttas till fixedupdate
-        let playerPos = this.movement.Update(deltaTime, this.inputs);
-        this.camera.CameraView(playerPos);
+        this.playerSystem.PlayerMovement(deltaTime, this.inputs);
+        this.camera.CameraView(this.playerSystem.playerObj.Pos);
+        //console.log(this.playerSystem.playerObj.Pos);
 
+        this.Render(deltaTime);        
+
+        //////playerCollider är för liten
+        this.collisions.CollisionHandler(this.playerSystem.playerObj, this.enemySystem.enemiesObj);
+    }
+
+    Render(deltaTime)
+    {
         this.rend.ClearScreen();
-        this.rend.Render(this.shaderManager.Get("object"), this.PlayerSystem.playerQuadBatch);
-        this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.CreateEnemyQuadBatch(deltaTime));
+        this.rend.Render(this.shaderManager.Get("object"), this.playerSystem.CreatePlayerQuadBatch());//playerQuadBatch);
+        this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.CreateRound(deltaTime));
     }
 
     FixedUpdate(fixedDeltaTime) 
     {
-        
+        this.playerSystem.FixedUpdate();
+        this.enemySystem.FixedUpdate();
+    }
+
+    Start()
+    {
+
     }
 }

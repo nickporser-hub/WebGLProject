@@ -1,4 +1,4 @@
-import MathFunctions from "../Core/MathFunctions.js";
+import MathFunctions from "../../Core/MathFunctions.js";
 export default class PlayerVertices
 {
     constructor()
@@ -6,8 +6,8 @@ export default class PlayerVertices
         this.mathFs = new MathFunctions();
         this.uvIndex = 
         {
-            swedenShip: 0,
-            finlandShip: 1
+            whiteBird: 0,
+            duckBird: 6
         }; 
     }
 
@@ -17,13 +17,15 @@ export default class PlayerVertices
         let scale = 3;
         let positions = [];
         let amount = 1;
+        let quadSizes = [];
         const quadSize = this.mathFs.Vec2(playerSize.x * scale, playerSize.y * scale);
-        const centerQuad = this.mathFs.Vec2(quadSize.x * -0.5, quadSize.y * -0.5); // centrera quaden
+        const centerQuad = this.mathFs.Vec2(0, 0);
+        quadSizes.push(quadSize);
 
         positions.push(centerQuad);
 
-        uvIndex.push(this.uvIndex.swedenShip);
+        uvIndex.push(this.uvIndex.whiteBird);
         
-        return {Positions: positions, QuadSize: quadSize, Amount: amount, UVIndex: uvIndex};
+        return {Positions: positions, QuadSize: quadSizes, Amount: amount, UVIndex: uvIndex};
     }
 }

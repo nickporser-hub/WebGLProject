@@ -12,8 +12,8 @@ export default class
         for (let i = 0; i < pos.length; i++)
         {
             pos[i].x -= velocity * deltaTime;
-            if (pos[i].x < -1200)
-                pos[i].x = 300;
+            if (pos[i].x < -window.innerWidth) // temp fix ska göra relativ till skärmen
+                pos[i].x = window.innerWidth * 0.7;
         }
         return pos;
     }

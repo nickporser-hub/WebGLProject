@@ -1,14 +1,13 @@
-import MathFunctions from "../Core/MathFunctions.js";
+import MathFunctions from "../../Core/MathFunctions.js";
 
 export default class Movement
 {
     constructor()
     {
         this.mathFs = new MathFunctions();
-        this.playerPos = this.mathFs.Vec2(0, 0);
     }
 
-    Update(deltaTime, input)
+    Update(deltaTime, input, playerPos)
     {
         const screenAspect = window.innerHeight / window.innerWidth;
         let direction = this.mathFs.Vec2(0, 0);
@@ -23,10 +22,10 @@ export default class Movement
             velocity = 2 / 1.414;
         else 
             velocity = 2;
-        this.playerPos.x += velocity * deltaTime * direction.x * screenAspect;
-        this.playerPos.y += velocity * deltaTime * direction.y;
+        playerPos.x += velocity * deltaTime * direction.x * screenAspect * window.innerWidth / 2;
+        playerPos.y += velocity * deltaTime * direction.y * window.innerHeight / 2;
 
-        return this.playerPos;
+        return playerPos;
     }
 
 }

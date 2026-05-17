@@ -38,13 +38,13 @@ export default class Renderer
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            0.7, 0, 0, 1
+            0, 0, 0, 1
         ]);  
 
         this.enemyShader.Use();
         this.enemyShader.UniformMatrix4fv(this.enemyShader.uView, staticView);
 
-        const shipsTexture = this.textureLoader.LoadTexture("Assets/Textures/SpaceGameSpriteSheet.png"); // load the texture
+        const shipsTexture = this.textureLoader.LoadTexture("Assets/Textures/BirdSheetV1.png"); // load the texture
         this.objectShader.TextureUniform(this.objectShader.uTexture, shipsTexture, 0);
         this.enemyShader.TextureUniform(this.enemyShader.uTexture, shipsTexture, 0);
     }

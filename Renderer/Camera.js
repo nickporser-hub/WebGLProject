@@ -21,13 +21,13 @@ export default class Camera
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            pos.x, pos.y, 0, 1
+            pos.x * 2 / window.innerWidth, pos.y * 2 / window.innerHeight, 0, 1
         ]);
 
         this.objectShader.UniformMatrix4fv(this.objectShader.uView, view);
     }
 
-    OnResize() //fixa
+    OnResize() 
     {
         this.gl.viewport(0, 0, window.innerWidth, window.innerHeight);
         this.gl.canvas.width = window.innerWidth;
