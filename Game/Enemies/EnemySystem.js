@@ -5,12 +5,13 @@ import MathFunctions from "../../Core/MathFunctions.js";
 import QuadBatchBuilder from "../../Renderer/QuadBatchBuilder.js";
 import Animation from "../../Renderer/Animation.js";
 
-export default class EnemySystem
+export default class EnemySystem//allmänna funktioner om fienden
 {
     constructor()
     {
         this.mathFs = new MathFunctions();
-        this.enemySize = this.mathFs.Vec2(48, 48);
+        this.enemySpriteSize = this.mathFs.Vec2(96, 96);
+        this.enemyColliderSize = this.mathFs.Vec2(60, 90);
 
         this.quadBatchBuilder = new QuadBatchBuilder(); 
         this.animation = new Animation();
@@ -21,7 +22,7 @@ export default class EnemySystem
         this.rounds = new Map(); //Sparar alla rundor i en map
         this.RoundSet();
 
-        this.removeIndexArr = [];////////////////////temp lista på vilka enemies som ska tas bort
+        this.removeIndexArr = [];//lista på vilka enemies som ska tas bort
         this.enemiesObj = this.RoundGet("round1");
         this.enemyUVs;
         this.EnemyUv();
@@ -48,8 +49,13 @@ export default class EnemySystem
 
     CreateEnemyQuadBatch(deltaTime, enemies)
     {
-        enemies.Positions = this.enemyMovement.BasicLeftMovement(enemies.Positions, deltaTime); // vilken movement de har
-        this.enemiesObj = enemies;
+        enemies.Pos = this.enemyMovement.BasicLeftMovement(enemies.Pos, deltaTime); // vilken movement de har
+        this.enemiesObj = structuredClone(enemies);
+
+        for (let i = 0; i < this.enemiesObj.Size.length; i++)
+        {
+            this.enemiesObj.Size[i] = this.enemyColliderSize;
+        }
         
         const amount = enemies.Amount;
         const index = enemies.UVIndex;
@@ -64,7 +70,7 @@ export default class EnemySystem
         let enemy = enemies; 
         for (let i = 0; i < indexArr.length; i++)
         {
-            enemy.Positions.splice(indexArr[i], 1);
+            enemy.Pos.splice(indexArr[i], 1);
             enemy.UVIndex.splice(indexArr[i], 1);
             enemy.Amount--;
             indexArr.splice(i, 1);
@@ -75,7 +81,7 @@ export default class EnemySystem
 
     RoundSet()//sätt rundorna
     {
-        const enemyRound1 = this.enemySpawns.Round1(this.enemySize);
+        const enemyRound1 = this.enemySpawns.Round1(this.enemySpriteSize);
         this.rounds.set("round1", enemyRound1);
     }
 

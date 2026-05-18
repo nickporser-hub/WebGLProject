@@ -10,12 +10,12 @@ export default class QuadBatchBuilder
         let vertices = []; // vertices för quadsen
         let indices = []; // ordern för vertices
 
-        const positions = objekt.Positions;
+        const positions = objekt.Pos;
         const amount = objekt.Amount;
 
         for (let i = 0; i < amount; i++)
         {
-            let quadSize = objekt.QuadSize[i]; 
+            let quadSize = objekt.Size[i]; 
 
             let u0 = UVs.U0[i];
             let v0 = UVs.V0[i];

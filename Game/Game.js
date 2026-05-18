@@ -1,6 +1,5 @@
 import Render from "../Renderer/Render.js";
 import Inputs from "./Inputs.js";
-//import Movement from "./Player/Movement.js";
 import EnemySystem from "./Enemies/EnemySystem.js";
 import PlayerSystem from "./Player/PlayerSystem.js";
 import Camera from "../Renderer/Camera.js";
@@ -21,7 +20,6 @@ export default class Game
         this.playerSystem = new PlayerSystem();
         this.rend = new Render(this.gl, this.shaderManager);
         this.inputs = new Inputs();
-        //this.movement = new Movement();
         this.collisions = new Collisions();
 
         this.accumulator = 0;
@@ -32,7 +30,7 @@ export default class Game
         this.GameLoop();
     }
 
-    GameLoop()
+    GameLoop() // simpel gameloop
     {
         const cappedFrames = 100;
         const targetDelta = 1 / cappedFrames
@@ -70,8 +68,7 @@ export default class Game
 
         this.Render(deltaTime);        
 
-        //////playerCollider är för liten
-        this.collisions.CollisionHandler(this.playerSystem.playerObj, this.enemySystem.enemiesObj);
+        
     }
 
     Render(deltaTime)
@@ -81,10 +78,11 @@ export default class Game
         this.rend.Render(this.shaderManager.Get("enemy"), this.enemySystem.CreateRound(deltaTime));
     }
 
-    FixedUpdate(fixedDeltaTime) 
+    FixedUpdate(fixedDeltaTime) //runar med fixad tick
     {
         this.playerSystem.FixedUpdate();
         this.enemySystem.FixedUpdate();
+        this.collisions.CollisionHandler(this.playerSystem.playerObj, this.enemySystem.enemiesObj);//kolla colliders
     }
 
     Start()

@@ -10,15 +10,16 @@ export default class PlayerSystem
     constructor()
     {
         this.mathFs = new MathFunctions();
-        this.playerSize = this.mathFs.Vec2(48, 48);
+        this.playerQuadSize = this.mathFs.Vec2(144, 144);
+        this.playerColliderSize = this.mathFs.Vec2(100, 144);
         this.playerVertices = new PlayerVertices();
         this.movement = new Movement();
 
         this.animation = new Animation();
         this.quadBatchBuilder = new QuadBatchBuilder(); 
         
-        this.player = this.playerVertices.PlayerSpawn(this.playerSize);
-        this.playerObj = {Size: this.player.QuadSize[0], Pos: this.mathFs.Vec2(0, 0)};
+        this.player = this.playerVertices.PlayerSpawn(this.playerQuadSize);
+        this.playerObj = {Size: this.playerColliderSize, Pos: this.mathFs.Vec2(0, 0)};
 
         this.playerUVs;
         this.PlayerUV();

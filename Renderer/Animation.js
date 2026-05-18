@@ -7,6 +7,9 @@ export default class
     {
         this.mathFs = new MathFunctions();
         this.birdTextureCoords = new TextureCoords(this.mathFs.Vec2(288, 288), this.mathFs.Vec2(48, 48));
+        
+        this.start = true;
+        this.startUV = 0;
         this.iterations = 0;
         this.index = [0];
     }
@@ -17,7 +20,7 @@ export default class
         {
             if (this.index[0] % 5 == 0 && this.index[0] != uvIndex)
             {
-                this.index[0] = 6;
+                this.index[0] = this.startUV;
             }
             else
             {
@@ -30,8 +33,16 @@ export default class
         return this.index;
     }
 
-    BirdAnimation(uvIndex, amount, iterations)
+    StartUV(uvIndex)
     {
+        if (this.start)
+            this.startUV = uvIndex;
+        this.start = false;
+    }
+
+    BirdAnimation(uvIndex, amount, iterations)
+    { 
+        this.StartUV(uvIndex);
         const index = this.BirdAnimationIndex(uvIndex, iterations);
         const coords = this.birdTextureCoords.GetUV(index, amount);
         return coords;

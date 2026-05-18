@@ -15,11 +15,10 @@ export default class EnemySpawns
     Round1(enemySize)
     {
         let uvIndex = [];
-        let scale = 2;
         let positions = [];
         let quadSizes = [];
         let amount = 7;
-        const quadSize = this.mathFs.Vec2(enemySize.x * scale, enemySize.y * scale);
+        const quadSize = this.mathFs.Vec2(enemySize.x, enemySize.y);
         const centerQuad = this.mathFs.Vec2(quadSize.x * -0.5, quadSize.y * -0.5); // centrera quaden
         
         quadSizes.push(quadSize);
@@ -43,6 +42,6 @@ export default class EnemySpawns
             uvIndex.push(this.uvIndex.duckBird);
         }
         
-        return {Positions: positions, QuadSize: quadSizes, Amount: amount, UVIndex: uvIndex};
+        return {Pos: positions, Size: quadSizes, Amount: amount, UVIndex: uvIndex};
     }
 }
