@@ -10,7 +10,7 @@ export default class EnemySystem//allmänna funktioner om fienden
     constructor()
     {
         this.mathFs = new MathFunctions();
-        this.enemySpriteSize = this.mathFs.Vec2(96, 96);
+        this.enemyQuadSize = this.mathFs.Vec2(96, 96);
         this.enemyColliderSize = this.mathFs.Vec2(60, 90);
 
         this.quadBatchBuilder = new QuadBatchBuilder(); 
@@ -22,16 +22,16 @@ export default class EnemySystem//allmänna funktioner om fienden
         this.rounds = new Map(); //Sparar alla rundor i en map
         this.RoundSet();
 
-        this.removeIndexArr = [];//lista på vilka enemies som ska tas bort
-        this.enemiesObj = this.RoundGet("round1");
+        this.removeIndexArr = [];//lista på vilka enemies som ska tas bort//temp
+        this.enemiesObj = this.RoundGet("round0"); // temp första rundan
         this.enemyUVs;
         this.EnemyUv();
     }
 
     CreateRound(deltaTime)//vilka enemies som ska renderas
     {
-        const round1 = this.RoundGet("round1");
-        const enemies = this.RemoveEnemies(round1, this.removeIndexArr);
+        const round = this.RoundGet("round0"); //vilken runda 
+        const enemies = this.RemoveEnemies(round, this.removeIndexArr);
         const batch = this.CreateEnemyQuadBatch(deltaTime, enemies);
         return batch;
     }
@@ -81,7 +81,9 @@ export default class EnemySystem//allmänna funktioner om fienden
 
     RoundSet()//sätt rundorna
     {
-        const enemyRound1 = this.enemySpawns.Round1(this.enemySpriteSize);
+        const enemyRound0 = this.enemySpawns.Round0(this.enemySpawns.RoundObject(1, this.enemyQuadSize));
+        this.rounds.set("round0", enemyRound0);
+        const enemyRound1 = this.enemySpawns.Round1(this.enemySpawns.RoundObject(7, this.enemyQuadSize));
         this.rounds.set("round1", enemyRound1);
     }
 
